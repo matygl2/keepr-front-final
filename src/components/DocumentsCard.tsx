@@ -1,4 +1,4 @@
-import * as DocumentPicker from 'expo-document-picker';
+import { File } from 'expo-file-system';
 import { Image } from 'expo-image';
 import * as Sharing from 'expo-sharing';
 import React, { useMemo, useRef, useState } from 'react';
@@ -20,7 +20,6 @@ import {
   DOCUMENT_TYPES,
   documentImageSource,
   downloadDocumentPdf,
-  readFileBase64,
 } from '../api/documents';
 import { pickPhotoBase64, PhotoSource } from '../api/pickPhoto';
 import { colors, radius, spacing } from '../constants/theme';
@@ -92,35 +91,43 @@ export default function DocumentsCard({ product }: { product: Product }) {
   };
 
   const addPdf = async (type: DocumentType) => {
-    let result: DocumentPicker.DocumentPickerResult;
+    let file: File;
+
     try {
-      result = await DocumentPicker.getDocumentAsync({
-        type: 'application/pdf',
-        copyToCacheDirectory: true,
+      const result = await File.pickFileAsync({
+        mimeTypes: ['application/pdf'],
       });
+
+      if (result.canceled) return;
+
+      file = result.result;
+
+      if (file.size > MAX_FILE_BYTES) {
+        Alert.alert('File too large', 'The PDF must be 5 MB or smaller.');
+        return;
+      }
     } catch (err) {
       const detail = err instanceof Error ? err.message : String(err);
       Alert.alert('Could not open your files', detail);
       return;
     }
-    if (result.canceled) return;
-    const asset = result.assets[0];
-    if (asset.size !== undefined && asset.size > MAX_FILE_BYTES) {
-      Alert.alert('File too large', 'The PDF must be 5 MB or smaller.');
-      return;
-    }
 
     setBusy(type);
+
     try {
-      await attachDocument(product.id, type, await readFileBase64(asset.uri));
+      const base64 = await file.base64();
+      await attachDocument(product.id, type, base64);
     } catch (err) {
-      const detail = err instanceof Error && err.name !== 'ApiError' ? err.message : errorMessage(err);
+      const detail =
+        err instanceof Error && err.name !== 'ApiError'
+          ? err.message
+          : errorMessage(err);
+
       Alert.alert('Could not save the PDF', detail);
     } finally {
       setBusy(null);
     }
   };
-
   // El PDF es privado: se baja con el token. En iPhone se muestra dentro de la app;
   // en Android el WebView no dibuja PDF, así que se abre con la app de PDF del teléfono.
   const pdfPhotoId = pdfFor ? photoIdOf(pdfFor) : undefined;

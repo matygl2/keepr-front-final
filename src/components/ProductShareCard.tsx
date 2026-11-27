@@ -2,6 +2,7 @@
 import * as Clipboard from 'expo-clipboard';
 import * as Print from 'expo-print';
 import * as Sharing from 'expo-sharing';
+import * as FileSystem from 'expo-file-system/legacy';
 import React, { useState } from 'react';
 import {
   ActivityIndicator,
@@ -42,13 +43,37 @@ export default function ProductShareCard({ product }: { product: Product }) {
 
   const shareWarrantyPdf = async () => {
     setCreatingPdf(true);
+
+    let tempUri: string | null = null;
+
     try {
       if (!(await Sharing.isAvailableAsync())) {
         Alert.alert('Not available', 'This device cannot share files from Keepr.');
         return;
       }
-      const { uri } = await Print.printToFileAsync({ html: buildWarrantyHtml(product) });
-      await Sharing.shareAsync(uri, {
+
+      const result = await Print.printToFileAsync({
+        html: buildWarrantyHtml(product),
+        base64: true,
+      });
+
+      if (!result.base64) {
+        throw new Error('Could not obtain the PDF content.');
+      }
+
+      tempUri = `${FileSystem.cacheDirectory}keepr-warranty-${Date.now()}.pdf`;
+
+      await FileSystem.writeAsStringAsync(tempUri, result.base64, {
+        encoding: FileSystem.EncodingType.Base64,
+      });
+
+      const info = await FileSystem.getInfoAsync(tempUri);
+
+      if (!info.exists || info.size === 0) {
+        throw new Error('The PDF file could not be saved.');
+      }
+
+      await Sharing.shareAsync(tempUri, {
         mimeType: 'application/pdf',
         UTI: 'com.adobe.pdf',
         dialogTitle: `${product.name} — warranty`,
@@ -57,10 +82,17 @@ export default function ProductShareCard({ product }: { product: Product }) {
       const detail = err instanceof Error ? err.message : String(err);
       Alert.alert('Could not create the PDF', detail);
     } finally {
+      if (tempUri) {
+        try {
+          await FileSystem.deleteAsync(tempUri, { idempotent: true });
+        } catch {
+          // No interrumpir el flujo si no se puede borrar el temporal.
+        }
+      }
+
       setCreatingPdf(false);
     }
   };
-
   const copyListing = async () => {
     try {
       await Clipboard.setStringAsync(listingText);
