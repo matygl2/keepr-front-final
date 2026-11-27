@@ -133,7 +133,6 @@ const LISTING_TEXTS = {
     serviced: (count: number, title: string, date: string) =>
       `• Serviced ${count} time${count > 1 ? 's' : ''}; last service: ${title} (${formatDate(date)}).`,
     noService: '• No repairs or service needed so far.',
-    closing: 'Full purchase and maintenance history available on request.',
   },
   es: {
     title: (name: string) => `VENDO: ${name}`,
@@ -146,7 +145,6 @@ const LISTING_TEXTS = {
     serviced: (count: number, title: string, date: string) =>
       `• Tuvo ${count} service${count > 1 ? 's' : ''}; el último: ${title} (${formatDateEs(date)}).`,
     noService: '• Nunca necesitó reparaciones ni service.',
-    closing: 'Te paso el historial completo de compra y mantenimiento si lo necesitás.',
   },
 };
 
@@ -164,6 +162,5 @@ export function buildSaleListingText(product: Product, language: ListingLanguage
   lines.push(
     lastService ? t.serviced(services.length, lastService.title, lastService.date) : t.noService
   );
-  lines.push('', t.closing);
   return lines.join('\n');
 }

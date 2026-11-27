@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter } from "expo-router";
+import { useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -11,6 +12,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { errorMessage } from "../../../api/client";
 import DocumentsCard from "../../../components/DocumentsCard";
 import ProductShareCard from "../../../components/ProductShareCard";
+import TransferProductModal from "../../../components/TransferProductModal";
 import { colors, fonts, radius, spacing } from "../../../constants/theme";
 import { useProducts } from "../../../context/ProductsContext";
 import {
@@ -78,6 +80,7 @@ export default function ProductDetailScreen() {
 function ProductDetailContent({ product }: { product: Product }) {
   const router = useRouter();
   const { removeProduct } = useProducts();
+  const [transferOpen, setTransferOpen] = useState(false);
 
   const status = getWarrantyStatus(product.warrantyExpiryDate);
 
@@ -284,9 +287,7 @@ function ProductDetailContent({ product }: { product: Product }) {
 
             <TouchableOpacity
               style={[styles.actionCard, styles.actionCardOutline]}
-              onPress={() =>
-                Alert.alert("Transfer Product", "This is a UI demo action.")
-              }
+              onPress={() => setTransferOpen(true)}
             >
               <Text style={styles.actionIcon}>🔗</Text>
 
@@ -306,6 +307,21 @@ function ProductDetailContent({ product }: { product: Product }) {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      <TransferProductModal
+        visible={transferOpen}
+        productId={product.id}
+        productName={product.name}
+        onClose={() => setTransferOpen(false)}
+        onTransferred={(email) => {
+          setTransferOpen(false);
+          router.replace("/(tabs)");
+          Alert.alert(
+            "Product transferred",
+            `"${product.name}" now belongs to ${email}.`,
+          );
+        }}
+      />
     </SafeAreaView>
   );
 }

@@ -34,6 +34,8 @@ interface ProductsContextValue {
   /** Edita campos del producto. `calendarEventId: undefined` lo borra. */
   updateProduct: (id: string, patch: Partial<Product>) => Promise<Product>;
   removeProduct: (id: string) => Promise<void>;
+  /** Pasa el producto a otra cuenta de Keepr (por su email) y lo saca de esta lista. */
+  transferProduct: (id: string, email: string) => Promise<void>;
   /** Sube (o reemplaza) la foto del recibo de un producto ya guardado, a partir de su ubicación. */
   attachReceipt: (id: string, photoUri: string) => Promise<Product>;
   /** Sube (o reemplaza) la foto de un documento. `image` es un JPEG en base64. */
@@ -116,6 +118,12 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
     setProducts((prev) => prev.filter((p) => p.id !== id));
   }, []);
 
+  const transferProduct = useCallback(async (id: string, email: string) => {
+    await api.post(`/products/${id}/transfer`, { email });
+    // Ya no es nuestro: el servidor dejó de devolverlo, así que también lo sacamos de acá.
+    setProducts((prev) => prev.filter((p) => p.id !== id));
+  }, []);
+
   const attachReceipt = useCallback(
     async (id: string, photoUri: string) => {
       const product = await uploadReceipt(id, photoUri);
@@ -164,6 +172,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
       addProduct,
       updateProduct,
       removeProduct,
+      transferProduct,
       attachReceipt,
       attachDocument,
       removeDocument,
@@ -177,6 +186,7 @@ export function ProductsProvider({ children }: { children: React.ReactNode }) {
       addProduct,
       updateProduct,
       removeProduct,
+      transferProduct,
       attachReceipt,
       attachDocument,
       removeDocument,
