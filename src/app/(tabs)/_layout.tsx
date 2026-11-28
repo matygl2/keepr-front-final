@@ -61,15 +61,6 @@ export default function TabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="calendar"
-        options={{
-          title: 'Calendar',
-          tabBarIcon: ({ focused }) => (
-            <TabIcon icon="calendar" focused={focused} />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="scan"
         options={{
           title: '',
@@ -82,17 +73,6 @@ export default function TabsLayout() {
           title: 'Map',
           tabBarIcon: ({ focused }) => (
             <TabIcon icon="map" focused={focused} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="warranties"
-        options={{
-          title: 'Warranties',
-          // "Warranties" no entra en el ancho de una de las 7 pestañas.
-          tabBarLabel: 'Warranty',
-          tabBarIcon: ({ focused }) => (
-            <TabIcon icon="shield-checkmark" focused={focused} />
           ),
         }}
       />

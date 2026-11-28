@@ -7,7 +7,7 @@ import { StyleSheet, View } from 'react-native';
 import { Directions, Gesture, GestureDetector } from 'react-native-gesture-handler';
 import { runOnJS } from 'react-native-worklets';
 
-export const SWIPE_ORDER = ['index', 'calendar', 'warranties', 'profile'];
+export const SWIPE_ORDER = ['index', 'profile'];
 
 export function getNextTab(current: string, step: 1 | -1): string | null {
   const index = SWIPE_ORDER.indexOf(current);

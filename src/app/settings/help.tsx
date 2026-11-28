@@ -88,7 +88,7 @@ const SECTIONS: Section[] = [
       {
         question: 'How do I move between tabs faster?',
         answer:
-          'Swipe left or right on Home, Calendar, Warranties or Profile to go to the next tab. You can always tap the tab bar too.',
+          'Swipe left or right on Home or Profile to jump between them. You can always tap the tab bar too.',
       },
     ],
   },
