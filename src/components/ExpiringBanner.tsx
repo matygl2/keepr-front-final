@@ -15,7 +15,9 @@ export default function ExpiringBanner({ count }: Props) {
     <TouchableOpacity
       style={styles.banner}
       activeOpacity={0.7}
-      onPress={() => router.push('/(tabs)/warranties')}
+      onPress={() =>
+        router.push({ pathname: '/(tabs)/products', params: { view: 'warranties' } })
+      }
     >
       <View style={styles.iconWrap}>
         <Text style={styles.bell}>🔔</Text>

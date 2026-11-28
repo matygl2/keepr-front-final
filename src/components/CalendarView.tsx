@@ -7,21 +7,21 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import CalendarGrid, { DayMarker } from "../../components/CalendarGrid";
-import ProductIcon from "../../components/ProductIcon";
-import { colors, fonts, radius, spacing } from "../../constants/theme";
-import { useProducts } from "../../context/ProductsContext";
-import { getWarrantyStatus } from "../../data/mockData";
-import { Product } from "../../types";
-import { toISODateOnly } from "../../utils/dateUtils";
+import CalendarGrid, { DayMarker } from "./CalendarGrid";
+import ProductIcon from "./ProductIcon";
+import { colors, fonts, radius, spacing } from "../constants/theme";
+import { useProducts } from "../context/ProductsContext";
+import { getWarrantyStatus } from "../data/mockData";
+import { Product } from "../types";
+import { toISODateOnly } from "../utils/dateUtils";
 
 interface DayEvent {
   product: Product;
   kind: "purchase" | "expiry";
 }
 
-export default function CalendarScreen() {
+// Vista de calendario de la pestaña Products: compras y vencimientos de garantía por día.
+export default function CalendarView() {
   const router = useRouter();
   const { products } = useProducts();
   const now = new Date();
@@ -77,64 +77,60 @@ export default function CalendarScreen() {
   };
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={["top"]}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Calendar</Text>
+    <ScrollView contentContainerStyle={styles.content}>
+      <CalendarGrid
+        year={viewYear}
+        month={viewMonth}
+        markedDates={markedDates}
+        selectedDate={selectedDate}
+        onSelectDate={setSelectedDate}
+        onPrevMonth={goPrevMonth}
+        onNextMonth={goNextMonth}
+      />
 
-        <CalendarGrid
-          year={viewYear}
-          month={viewMonth}
-          markedDates={markedDates}
-          selectedDate={selectedDate}
-          onSelectDate={setSelectedDate}
-          onPrevMonth={goPrevMonth}
-          onNextMonth={goNextMonth}
-        />
-
-        <View style={styles.legend}>
-          <View style={styles.legendItem}>
-            <View
-              style={[styles.legendDot, { backgroundColor: colors.secondary }]}
-            />
-            <Text style={styles.legendText}>Purchased</Text>
-          </View>
-          <View style={styles.legendItem}>
-            <View
-              style={[styles.legendDot, { backgroundColor: colors.danger }]}
-            />
-            <Text style={styles.legendText}>Warranty expires</Text>
-          </View>
-          <View style={styles.legendItem}>
-            <View
-              style={[styles.legendDot, { backgroundColor: colors.textMuted }]}
-            />
-            <Text style={styles.legendText}>Already expired</Text>
-          </View>
+      <View style={styles.legend}>
+        <View style={styles.legendItem}>
+          <View
+            style={[styles.legendDot, { backgroundColor: colors.secondary }]}
+          />
+          <Text style={styles.legendText}>Purchased</Text>
         </View>
+        <View style={styles.legendItem}>
+          <View
+            style={[styles.legendDot, { backgroundColor: colors.danger }]}
+          />
+          <Text style={styles.legendText}>Warranty expires</Text>
+        </View>
+        <View style={styles.legendItem}>
+          <View
+            style={[styles.legendDot, { backgroundColor: colors.textMuted }]}
+          />
+          <Text style={styles.legendText}>Already expired</Text>
+        </View>
+      </View>
 
-        <Text style={styles.sectionTitle}>
-          {selectedDate
-            ? selectedDate.toLocaleDateString("en-US", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-              })
-            : "Select a day"}
-        </Text>
+      <Text style={styles.sectionTitle}>
+        {selectedDate
+          ? selectedDate.toLocaleDateString("en-US", {
+              weekday: "long",
+              month: "long",
+              day: "numeric",
+            })
+          : "Select a day"}
+      </Text>
 
-        {selectedEvents.length === 0 ? (
-          <Text style={styles.emptyText}>No warranty events on this day.</Text>
-        ) : (
-          selectedEvents.map((event, idx) => (
-            <EventRow
-              key={`${event.product.id}-${event.kind}-${idx}`}
-              event={event}
-              onPress={() => router.push(`/product/${event.product.id}`)}
-            />
-          ))
-        )}
-      </ScrollView>
-    </SafeAreaView>
+      {selectedEvents.length === 0 ? (
+        <Text style={styles.emptyText}>No warranty events on this day.</Text>
+      ) : (
+        selectedEvents.map((event, idx) => (
+          <EventRow
+            key={`${event.product.id}-${event.kind}-${idx}`}
+            event={event}
+            onPress={() => router.push(`/product/${event.product.id}`)}
+          />
+        ))
+      )}
+    </ScrollView>
   );
 }
 
@@ -168,19 +164,10 @@ function EventRow({
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
   content: {
-    padding: spacing.lg,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
     paddingBottom: spacing.xl,
-  },
-  title: {
-    fontFamily: fonts.serif,
-    fontSize: 28,
-    color: colors.primary,
-    marginBottom: spacing.lg,
   },
   legend: {
     flexDirection: "row",

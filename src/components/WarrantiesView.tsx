@@ -7,12 +7,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import ProductIcon from '../../components/ProductIcon';
-import { colors, fonts, radius, spacing } from '../../constants/theme';
-import { formatRemaining, getWarrantyStatus } from '../../data/mockData';
-import { useProducts } from '../../context/ProductsContext';
-import { Product, WarrantyStatus } from '../../types';
+import ProductIcon from './ProductIcon';
+import { colors, fonts, radius, spacing } from '../constants/theme';
+import { formatRemaining, getWarrantyStatus } from '../data/mockData';
+import { useProducts } from '../context/ProductsContext';
+import { Product, WarrantyStatus } from '../types';
 
 const SECTIONS: { status: WarrantyStatus; label: string; color: string }[] = [
   { status: 'expiring', label: 'Expiring Soon', color: colors.danger },
@@ -47,7 +46,8 @@ function WarrantyRow({ product }: { product: Product }) {
   );
 }
 
-export default function WarrantiesScreen() {
+// Vista de garantías de la pestaña Products: agrupadas en por vencer, activas y vencidas.
+export default function WarrantiesView() {
   const { products } = useProducts();
 
   const grouped = useMemo(() => {
@@ -60,51 +60,38 @@ export default function WarrantiesScreen() {
   }, [products]);
 
   return (
-    <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text style={styles.title}>Warranties</Text>
-
-        {grouped.map((section) => (
-          <View key={section.status} style={styles.section}>
-            <View style={styles.sectionHeader}>
-              <View style={[styles.sectionDot, { backgroundColor: section.color }]} />
-              <Text style={[styles.sectionLabel, { color: section.color }]}>
-                {section.label.toUpperCase()}
-              </Text>
-              <Text style={styles.sectionCount}>{section.items.length}</Text>
-            </View>
-
-            <View style={styles.card}>
-              {section.items.map((product, idx) => (
-                <View key={product.id}>
-                  <WarrantyRow product={product} />
-                  {idx < section.items.length - 1 && (
-                    <View style={styles.divider} />
-                  )}
-                </View>
-              ))}
-            </View>
+    <ScrollView contentContainerStyle={styles.content}>
+      {grouped.map((section) => (
+        <View key={section.status} style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <View style={[styles.sectionDot, { backgroundColor: section.color }]} />
+            <Text style={[styles.sectionLabel, { color: section.color }]}>
+              {section.label.toUpperCase()}
+            </Text>
+            <Text style={styles.sectionCount}>{section.items.length}</Text>
           </View>
-        ))}
-      </ScrollView>
-    </SafeAreaView>
+
+          <View style={styles.card}>
+            {section.items.map((product, idx) => (
+              <View key={product.id}>
+                <WarrantyRow product={product} />
+                {idx < section.items.length - 1 && (
+                  <View style={styles.divider} />
+                )}
+              </View>
+            ))}
+          </View>
+        </View>
+      ))}
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
   content: {
-    padding: spacing.lg,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
     paddingBottom: spacing.xl,
-  },
-  title: {
-    fontFamily: fonts.serif,
-    fontSize: 28,
-    color: colors.primary,
-    marginBottom: spacing.lg,
   },
   section: {
     marginBottom: spacing.lg,
