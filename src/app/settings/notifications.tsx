@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import {
     ActivityIndicator,
     Alert,
@@ -11,6 +10,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import BackButton from "../../components/BackButton";
 import { colors, fonts, radius, spacing } from "../../constants/theme";
 import {
     ReminderDays,
@@ -37,12 +37,7 @@ export default function NotificationsScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
       <ScrollView contentContainerStyle={styles.content}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.backText}>‹ Back</Text>
-        </TouchableOpacity>
+        <BackButton />
 
         <Text style={styles.title}>Notifications</Text>
 
@@ -139,15 +134,6 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.lg,
     paddingBottom: spacing.xl,
-  },
-  backButton: {
-    alignSelf: "flex-start",
-    marginBottom: spacing.lg,
-  },
-  backText: {
-    color: colors.secondary,
-    fontSize: 16,
-    fontWeight: "600",
   },
   title: {
     fontFamily: fonts.serif,

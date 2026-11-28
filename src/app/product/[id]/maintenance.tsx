@@ -8,6 +8,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import BackButton from '../../../components/BackButton';
 import { colors, fonts, radius, spacing } from '../../../constants/theme';
 import { formatDate, formatMoney, getProductById } from '../../../data/mockData';
 import { useProducts } from '../../../context/ProductsContext';
@@ -33,12 +34,8 @@ export default function MaintenanceHistoryScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <ScrollView contentContainerStyle={styles.content}>
-        <View style={styles.headerRow}>
-          <TouchableOpacity onPress={() => router.back()} style={styles.backButton}>
-            <Text style={styles.backIcon}>←</Text>
-          </TouchableOpacity>
-          <Text style={styles.title}>Maintenance History</Text>
-        </View>
+        <BackButton />
+        <Text style={styles.title}>Maintenance History</Text>
 
         <View style={styles.productBanner}>
           <Text style={{ fontSize: 22 }}>{product.icon}</Text>
@@ -102,26 +99,11 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     color: colors.textPrimary,
   },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    marginBottom: spacing.lg,
-  },
-  backButton: {
-    width: 36,
-    height: 36,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backIcon: {
-    fontSize: 22,
-    color: colors.secondary,
-  },
   title: {
     fontFamily: fonts.serif,
     fontSize: 24,
     color: colors.primary,
+    marginBottom: spacing.lg,
   },
   productBanner: {
     flexDirection: 'row',

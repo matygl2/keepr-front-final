@@ -1,5 +1,4 @@
 import { File, Paths } from "expo-file-system";
-import { router } from "expo-router";
 import * as Sharing from "expo-sharing";
 import { useState } from "react";
 import {
@@ -12,6 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import BackButton from "../../components/BackButton";
 import { colors, fonts, radius, spacing } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 import { useProducts } from "../../context/ProductsContext";
@@ -100,12 +100,7 @@ export default function ExportDataScreen() {
     <SafeAreaView style={styles.safeArea} edges={["top"]}>
       <ScrollView contentContainerStyle={styles.content}>
         {/* HEADER */}
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <Text style={styles.backText}>← Back</Text>
-        </TouchableOpacity>
+        <BackButton />
 
         <Text style={styles.title}>Export my data</Text>
 
@@ -205,17 +200,6 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.lg,
     paddingBottom: spacing.xl + 40,
-  },
-
-  backButton: {
-    alignSelf: "flex-start",
-    marginBottom: spacing.md,
-  },
-
-  backText: {
-    fontSize: 15,
-    color: colors.primary,
-    fontWeight: "600",
   },
 
   title: {

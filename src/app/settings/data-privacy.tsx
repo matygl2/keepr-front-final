@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import { useState } from "react";
 import {
     KeyboardAvoidingView,
@@ -12,6 +11,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import FormField from "../../components/FormField";
+import BackButton from "../../components/BackButton";
 import { colors, fonts, radius, spacing } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 
@@ -86,13 +86,7 @@ export default function DataPrivacyScreen() {
         keyboardShouldPersistTaps="handled"
       >
         {/* BACK */}
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-          activeOpacity={0.7}
-        >
-          <Text style={styles.backText}>‹ Back</Text>
-        </TouchableOpacity>
+        <BackButton />
 
         {/* TITLE */}
         <Text style={styles.title}>Data & Privacy</Text>
@@ -251,17 +245,6 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.lg,
     paddingBottom: spacing.xl,
-  },
-
-  backButton: {
-    marginBottom: spacing.lg,
-    alignSelf: "flex-start",
-  },
-
-  backText: {
-    color: colors.primary,
-    fontSize: 16,
-    fontWeight: "600",
   },
 
   title: {
