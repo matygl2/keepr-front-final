@@ -17,6 +17,7 @@ import NewProductDocuments, {
   EMPTY_DOCUMENTS,
   PendingDocuments,
 } from '../../components/NewProductDocuments';
+import BackButton from '../../components/BackButton';
 import { colors, fonts, radius, spacing } from '../../constants/theme';
 import { useProducts } from '../../context/ProductsContext';
 import { formatDate, getProductById } from '../../data/mockData';
@@ -244,9 +245,7 @@ export default function NewProductScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <View style={styles.header}>
-          <TouchableOpacity onPress={() => router.back()} hitSlop={12}>
-            <Text style={styles.back}>‹ Back</Text>
-          </TouchableOpacity>
+          <BackButton />
         </View>
 
         <ScrollView
@@ -406,15 +405,11 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.sm,
-  },
-  back: {
-    color: colors.secondary,
-    fontSize: 16,
-    fontWeight: '600',
+    paddingTop: spacing.lg,
   },
   content: {
-    padding: spacing.lg,
+    paddingHorizontal: spacing.lg,
+    paddingTop: 0,
     paddingBottom: spacing.xl,
   },
   title: {

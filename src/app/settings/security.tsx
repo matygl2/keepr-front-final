@@ -1,4 +1,3 @@
-import { router } from "expo-router";
 import { useState } from "react";
 import {
     Alert,
@@ -14,6 +13,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { api, ApiError, errorMessage } from "../../api/client";
 import FormField from "../../components/FormField";
+import BackButton from "../../components/BackButton";
 import { colors, fonts, radius, spacing } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 
@@ -129,12 +129,7 @@ export default function SecurityScreen() {
         keyboardShouldPersistTaps="handled"
       >
         {/* HEADER */}
-        <TouchableOpacity
-          onPress={() => router.back()}
-          style={styles.backButton}
-        >
-          <Text style={styles.backText}>← Back</Text>
-        </TouchableOpacity>
+        <BackButton />
 
         <Text style={styles.title}>Security</Text>
 
@@ -312,17 +307,6 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.lg,
     paddingBottom: spacing.xl,
-  },
-
-  backButton: {
-    marginBottom: spacing.md,
-    alignSelf: "flex-start",
-  },
-
-  backText: {
-    fontSize: 15,
-    color: colors.primary,
-    fontWeight: "600",
   },
 
   title: {

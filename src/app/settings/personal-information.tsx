@@ -1,13 +1,12 @@
-import { router } from "expo-router";
 import {
     ScrollView,
     StyleSheet,
     Text,
-    TouchableOpacity,
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import BackButton from "../../components/BackButton";
 import { colors, fonts, radius, spacing } from "../../constants/theme";
 import { useAuth } from "../../context/AuthContext";
 
@@ -20,12 +19,7 @@ export default function PersonalInformationScreen() {
     <SafeAreaView style={styles.safeArea} edges={["top", "bottom"]}>
       <ScrollView contentContainerStyle={styles.content}>
         {/* VOLVER */}
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-        >
-          <Text style={styles.backText}>‹ Back</Text>
-        </TouchableOpacity>
+        <BackButton />
 
         {/* TITULO */}
         <Text style={styles.title}>Personal information</Text>
@@ -82,17 +76,6 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.lg,
     paddingBottom: spacing.xl,
-  },
-
-  backButton: {
-    marginBottom: spacing.lg,
-    alignSelf: "flex-start",
-  },
-
-  backText: {
-    color: colors.primary,
-    fontSize: 16,
-    fontWeight: "600",
   },
 
   title: {

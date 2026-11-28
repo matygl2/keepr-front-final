@@ -24,6 +24,7 @@ import {
 } from "../../../data/mockData";
 import type { Product } from "../../../types";
 import { parseISODate } from "../../../utils/dateUtils";
+import Ionicons from "@expo/vector-icons/build/Ionicons";
 
 const STATUS_DOT_COLOR = {
   active: colors.success,
@@ -132,7 +133,8 @@ function ProductDetailContent({ product }: { product: Product }) {
               style={styles.backButton}
               onPress={() => router.back()}
             >
-              <Text style={styles.backIcon}>←</Text>
+              <Ionicons name="chevron-back" size={22} color={colors.white} />
+              <Text style={styles.backText}>Back</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
@@ -395,8 +397,10 @@ const styles = StyleSheet.create({
   },
 
   backButton: {
-    width: 40,
     height: 40,
+    flexDirection: "row",
+    paddingLeft: spacing.xs,
+    paddingRight: spacing.md,
     borderRadius: radius.sm,
     backgroundColor: "rgba(255,255,255,0.15)",
     alignItems: "center",
@@ -404,9 +408,10 @@ const styles = StyleSheet.create({
     marginBottom: spacing.lg,
   },
 
-  backIcon: {
+  backText: {
     color: colors.white,
-    fontSize: 20,
+    fontSize: 16,
+    fontWeight: "600",
   },
 
   headerRow: {

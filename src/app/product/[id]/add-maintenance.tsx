@@ -10,11 +10,11 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { errorMessage } from '../../../api/client';
 import FormField from '../../../components/FormField';
+import BackButton from '../../../components/BackButton';
 import { colors, fonts, radius, spacing } from '../../../constants/theme';
 import { useProducts } from '../../../context/ProductsContext';
 import { formatDate, getProductById } from '../../../data/mockData';
@@ -86,17 +86,8 @@ export default function AddMaintenanceScreen() {
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
         <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
-          <View style={styles.headerRow}>
-            <TouchableOpacity
-              onPress={() => router.back()}
-              style={styles.backButton}
-              accessibilityRole="button"
-              accessibilityLabel="Back"
-            >
-              <Text style={styles.backIcon}>←</Text>
-            </TouchableOpacity>
-            <Text style={styles.title}>Add Maintenance</Text>
-          </View>
+          <BackButton />
+          <Text style={styles.title}>Add Maintenance</Text>
 
           <Text style={styles.productName}>{product.name}</Text>
 
@@ -166,26 +157,11 @@ const styles = StyleSheet.create({
     padding: spacing.lg,
     color: colors.textPrimary,
   },
-  headerRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    marginBottom: spacing.sm,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backIcon: {
-    fontSize: 22,
-    color: colors.secondary,
-  },
   title: {
     fontFamily: fonts.serif,
     fontSize: 24,
     color: colors.primary,
+    marginBottom: spacing.sm,
   },
   productName: {
     fontSize: 14,

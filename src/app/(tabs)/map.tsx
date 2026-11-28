@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.sm,
+    paddingTop: spacing.lg,
   },
   title: {
     fontFamily: fonts.serif,

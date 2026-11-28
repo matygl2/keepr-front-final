@@ -1,9 +1,9 @@
 // Ayuda y preguntas frecuentes. Cada pregunta se abre y se cierra al tocarla.
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { router } from 'expo-router';
 import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import BackButton from '../../components/BackButton';
 import { colors, fonts, radius, spacing } from '../../constants/theme';
 
 interface Question {
@@ -101,13 +101,7 @@ export default function HelpScreen() {
   return (
     <SafeAreaView style={styles.safeArea} edges={['top', 'bottom']}>
       <ScrollView contentContainerStyle={styles.content}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => router.back()}
-          accessibilityRole="button"
-        >
-          <Text style={styles.backText}>‹ Back</Text>
-        </TouchableOpacity>
+        <BackButton />
 
         <Text style={styles.title}>Help & FAQ</Text>
         <Text style={styles.subtitle}>Answers to the most common questions about Keepr.</Text>
@@ -154,17 +148,6 @@ const styles = StyleSheet.create({
   content: {
     padding: spacing.lg,
     paddingBottom: spacing.xl,
-  },
-  backButton: {
-    alignSelf: 'flex-start',
-    minHeight: 44,
-    justifyContent: 'center',
-    marginBottom: spacing.sm,
-  },
-  backText: {
-    color: colors.secondary,
-    fontSize: 16,
-    fontWeight: '600',
   },
   title: {
     fontFamily: fonts.serif,
